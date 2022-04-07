@@ -293,6 +293,7 @@ export default class RoomSubscription {
 
 	handleMessageReceived = (ddpMessage: IDDPMessage) => {
 		if (!this.timer) {
+			// @ts-ignore
 			this.timer = setTimeout(async () => {
 				// copy variables values to local and clean them
 				const _lastOpen = this.lastOpen;

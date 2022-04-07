@@ -238,6 +238,7 @@ const getRoomQueueId = (rid: string) => `ROOM-${rid}`;
 
 const debouncedUpdate = (subscription: ISubscription) => {
 	if (!subTimer) {
+		// @ts-ignore
 		subTimer = setTimeout(() => {
 			const batch = queue;
 			queue = {};
