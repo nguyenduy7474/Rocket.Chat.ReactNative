@@ -462,8 +462,8 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 	getSubscriptions = async () => {
 		this.unsubscribeQuery();
 
-		const { sortBy, showUnread, showFavorites, groupByType, user } = this.props;
-
+		// const { sortBy, showUnread, showFavorites, groupByType, user } = this.props;
+		const { sortBy, showUnread, showFavorites, user } = this.props;
 		const db = database.active;
 		let observable;
 
@@ -532,7 +532,9 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 			}
 
 			// type
-			if (groupByType) {
+			/* 	if (groupByType) {
+				console.info(groupByType)
+				console.info("vao day2")
 				const teams = chats.filter(s => filterIsTeam(s));
 				const discussions = chats.filter(s => filterIsDiscussion(s));
 				const channels = chats.filter(s => (s.t === 'c' || s.t === 'p') && !filterIsDiscussion(s) && !filterIsTeam(s));
@@ -545,6 +547,20 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 				tempChats = this.addRoomsGroup(chats, CHATS_HEADER, tempChats);
 			} else {
 				tempChats = chats;
+			} */
+
+			// console.info("ss")
+			const teams = chats.filter(s => filterIsTeam(s)).slice(0, 6);
+			const discussions = chats.filter(s => filterIsDiscussion(s)).slice(0, 6);
+			const channels = chats.filter(s => (s.t === 'c' || s.t === 'p') && !filterIsDiscussion(s) && !filterIsTeam(s)).slice(0, 6);
+			const direct = chats.filter(s => s.t === 'd' && !filterIsDiscussion(s) && !filterIsTeam(s)).slice(0, 6);
+			tempChats = this.addRoomsGroup(teams, TEAMS_HEADER, tempChats);
+			tempChats = this.addRoomsGroup(discussions, DISCUSSIONS_HEADER, tempChats);
+			tempChats = this.addRoomsGroup(channels, CHANNELS_HEADER, tempChats);
+			tempChats = this.addRoomsGroup(direct, DM_HEADER, tempChats);
+
+			if (showUnread || showFavorites || isOmnichannelAgent) {
+				tempChats = this.addRoomsGroup(chats, CHATS_HEADER, tempChats);
 			}
 
 			if (this.mounted) {
