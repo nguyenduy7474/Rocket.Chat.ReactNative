@@ -189,9 +189,9 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		this.mounted = true;
 		if (this.props.posuserinfor) this._checkPermission();
 
-		this.onTokenRefreshListener = messaging().onTokenRefresh(fcmToken => {
+		/* this.onTokenRefreshListener = messaging().onTokenRefresh(fcmToken => {
 			if (this.props.token) this.props.updatePushKey(this.props.token, fcmToken);
-		});
+		}); */
 		if (isTablet) {
 			EventEmitter.addEventListener(KEY_COMMAND, this.handleCommands);
 		}
