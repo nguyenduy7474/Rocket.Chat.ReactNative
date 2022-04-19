@@ -1,8 +1,9 @@
-package chat.rocket.reactnative;
+package com.oshimachat;
 
 import android.content.Context;
 
 import com.facebook.react.ReactInstanceManager;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 public class MainDebugApplication extends MainApplication  {
 

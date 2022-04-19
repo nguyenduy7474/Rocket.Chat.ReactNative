@@ -1,4 +1,4 @@
-package chat.rocket.reactnative;
+package com.oshimachat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

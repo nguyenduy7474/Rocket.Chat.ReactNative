@@ -1,4 +1,4 @@
-package chat.rocket.reactnative;
+package com.oshimachat;
 
 import android.content.Context;
 import android.os.Bundle;

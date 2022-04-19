@@ -1,4 +1,4 @@
-package chat.rocket.reactnative;
+package com.oshimachat;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -15,6 +15,7 @@ import com.facebook.react.ReactFragmentActivity;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import com.zoontek.rnbootsplash.RNBootSplash;
 import com.google.gson.Gson;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 class ThemePreferences {
   String currentTheme;

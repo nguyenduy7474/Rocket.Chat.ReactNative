@@ -90,7 +90,8 @@ class DirectoryView extends React.Component<IDirectoryViewProps, any> {
 
 		try {
 			const { data, type, globalUsers } = this.state;
-			const query = { text, type, workspace: globalUsers ? 'all' : 'local' };
+			const query = { text, type: 'discussions', workspace: globalUsers ? 'all' : 'local' };
+			console.info(type);
 			const directories = await RocketChat.getDirectory({
 				query,
 				offset: data.length,
