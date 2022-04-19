@@ -130,7 +130,23 @@ class LoginView extends React.Component<ILoginViewProps, any> {
 		const { user, password } = this.state;
 		const { dispatch } = this.props;
 		Keyboard.dismiss();
-		dispatch(loginRequest({ user, password }));
+		fetch('https://connect.oshima.vn/api/login', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				username: user,
+				password
+			})
+		})
+			.then(response => response.json())
+			.then(function (json) {
+				const string = JSON.stringify({ usertoken: json.data.token, key: json.data.user.push_key });
+				dispatch(loginRequest({ user, password }, string));
+			})
+			.catch(error => error);
 	};
 
 	renderUserForm = () => {

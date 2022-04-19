@@ -1,6 +1,6 @@
 import * as types from '../actions/actionsTypes';
 import { TActionsLogin } from '../actions/login';
-import { IUser, TUserStatus } from '../definitions';
+import { IUser, TUserStatus, IuserPos } from '../definitions';
 
 export interface IUserLogin {
 	id: string;
@@ -28,6 +28,7 @@ export interface ILogin {
 	error: Record<string, any>;
 	services: Record<string, any>;
 	failure: boolean;
+	posuserinfor: Partial<IuserPos>;
 }
 
 export const initialState: ILogin = {
@@ -37,7 +38,8 @@ export const initialState: ILogin = {
 	user: {},
 	error: {},
 	services: {},
-	failure: false
+	failure: false,
+	posuserinfor: {}
 };
 
 export default function login(state = initialState, action: TActionsLogin): ILogin {
@@ -58,6 +60,7 @@ export default function login(state = initialState, action: TActionsLogin): ILog
 				isFetching: false,
 				isAuthenticated: true,
 				user: action.user,
+				posuserinfor: action.posuserinfor,
 				failure: false,
 				error: {}
 			};

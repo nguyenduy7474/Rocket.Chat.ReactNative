@@ -7,6 +7,7 @@ import { Q } from '@nozbe/watermelondb';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import { Subscription } from 'rxjs';
 import { StackNavigationOptions } from '@react-navigation/stack';
+import messaging from '@react-native-firebase/messaging';
 
 import database from '../../lib/database';
 import RocketChat from '../../lib/rocketchat';
@@ -41,7 +42,7 @@ import SafeAreaView from '../../containers/SafeAreaView';
 import Header, { getHeaderTitlePosition } from '../../containers/Header';
 import { withDimensions } from '../../dimensions';
 import { getInquiryQueueSelector } from '../../ee/omnichannel/selectors/inquiry';
-import { IApplicationState, IBaseScreen, ISubscription, IUser, RootEnum, TSubscriptionModel } from '../../definitions';
+import { IApplicationState, IBaseScreen, ISubscription, IUser, RootEnum, TSubscriptionModel, IuserPos } from '../../definitions';
 import styles from './styles';
 import ServerDropdown from './ServerDropdown';
 import ListHeader, { TEncryptionBanner } from './ListHeader';
@@ -53,6 +54,7 @@ import { E2E_BANNER_TYPE, DisplayMode, SortBy, MAX_SIDEBAR_WIDTH, themes } from 
 interface IRoomsListViewProps extends IBaseScreen<ChatsStackParamList, 'RoomsListView'> {
 	[key: string]: any;
 	user: IUser;
+	posuserinfor: IuserPos;
 	server: string;
 	searchText: string;
 	changingServer: boolean;
@@ -158,6 +160,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 	private querySubscription?: Subscription;
 	private scroll?: FlatList;
 	private useRealName?: boolean;
+	private onTokenRefreshListener?: () => void;
 
 	constructor(props: IRoomsListViewProps) {
 		super(props);
@@ -184,7 +187,11 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		const { navigation, dispatch } = this.props;
 		this.handleHasPermission();
 		this.mounted = true;
+		if (this.props.posuserinfor) this._checkPermission();
 
+		this.onTokenRefreshListener = messaging().onTokenRefresh(fcmToken => {
+			if (this.props.token) this.props.updatePushKey(this.props.token, fcmToken);
+		});
 		if (isTablet) {
 			EventEmitter.addEventListener(KEY_COMMAND, this.handleCommands);
 		}
@@ -213,6 +220,73 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		});
 		console.timeEnd(`${this.constructor.name} mount`);
 	}
+
+	componentWillMount() {
+		this.initNotification();
+	}
+
+	initNotification = () => {
+		messaging()
+			.getInitialNotification()
+			.then(remoteMessage => {
+				this.onReceived(remoteMessage);
+			});
+	};
+
+	onReceived = (notification: any) => {
+		console.info('notification: ', notification);
+	};
+
+	_checkPermission = async () => {
+		const enabled = await messaging().hasPermission();
+		if (enabled) {
+			messaging()
+				.getToken()
+				.then(res => {
+					const userjson = JSON.parse(this.props.posuserinfor);
+					console.info('key ', res);
+					this.updateUerPushKey(userjson.usertoken, res);
+				})
+				.catch(err => {
+					console.info(err);
+				});
+			// pushToken = await messaging().getToken();
+			// this.props.updatePushKey(this.props.token, pushToken);
+		} else this._getPermission();
+	};
+
+	_getPermission = () => {
+		messaging()
+			.requestPermission()
+			.then(() => {
+				this._checkPermission();
+			})
+			.catch((error: any) => {
+				// User has rejected permissions
+				console.info(error);
+			});
+	};
+
+	updateUerPushKey = (token: string, key: string) =>
+		new Promise((resolve, reject) => {
+			const formData = new FormData();
+			formData.append('push_key', key);
+			fetch('https://connect.oshima.vn/api/update-user/', {
+				method: 'PUT',
+				body: formData,
+				headers: {
+					contentType: 'multipart/form-data',
+					Accept: 'application/json',
+					'Cache-Control': 'no-cache',
+					Authorization: `JWT ${token}`
+				}
+			})
+				.then(res => res.json())
+				.then(json => {
+					resolve(json);
+				})
+				.catch((error: any) => reject(error));
+		});
 
 	UNSAFE_componentWillReceiveProps(nextProps: IRoomsListViewProps) {
 		const { loadingServer, searchText, server, changingServer } = this.props;
@@ -357,6 +431,10 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 
 	componentWillUnmount() {
 		this.unsubscribeQuery();
+		if (this.onTokenRefreshListener) {
+			this.onTokenRefreshListener();
+		}
+
 		if (this.unsubscribeFocus) {
 			this.unsubscribeFocus();
 		}
@@ -1038,6 +1116,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 
 const mapStateToProps = (state: IApplicationState) => ({
 	user: getUserSelector(state),
+	posuserinfor: state.login.posuserinfor,
 	isMasterDetail: state.app.isMasterDetail,
 	server: state.server.server,
 	changingServer: state.server.changingServer,

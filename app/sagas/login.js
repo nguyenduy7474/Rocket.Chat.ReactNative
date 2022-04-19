@@ -27,7 +27,12 @@ const loginWithPasswordCall = args => RocketChat.loginWithPassword(args);
 const loginCall = (credentials, isFromWebView) => RocketChat.login(credentials, isFromWebView);
 const logoutCall = args => RocketChat.logout(args);
 
-const handleLoginRequest = function* handleLoginRequest({ credentials, logoutOnError = false, isFromWebView = false }) {
+const handleLoginRequest = function* handleLoginRequest({
+	credentials,
+	posuserinfor,
+	logoutOnError = false,
+	isFromWebView = false
+}) {
 	logEvent(events.LOGIN_DEFAULT_LOGIN);
 	try {
 		let result;
@@ -62,7 +67,7 @@ const handleLoginRequest = function* handleLoginRequest({ credentials, logoutOnE
 					log(e);
 				}
 			});
-			yield put(loginSuccess(result));
+			yield put(loginSuccess(result, posuserinfor));
 		}
 	} catch (e) {
 		if (e?.data?.message && /you've been logged out by the server/i.test(e.data.message)) {

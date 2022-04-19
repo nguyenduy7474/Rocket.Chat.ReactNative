@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { IUser } from '../definitions';
+import { IUser, IuserPos } from '../definitions';
 import * as types from './actionsTypes';
 
 interface ICredentials {
@@ -11,12 +11,14 @@ interface ICredentials {
 
 interface ILoginRequest extends Action {
 	credentials: any;
+	posuserinfor: string;
 	logoutOnError?: boolean;
 	isFromWebView?: boolean;
 }
 
 interface ILoginSuccess extends Action {
 	user: Partial<IUser>;
+	posuserinfor: Partial<IuserPos>;
 }
 
 interface ILoginFailure extends Action {
@@ -55,21 +57,24 @@ export type TActionsLogin = ILoginRequest &
 
 export function loginRequest(
 	credentials: Partial<ICredentials>,
+	posuserinfor: string,
 	logoutOnError?: boolean,
 	isFromWebView?: boolean
 ): ILoginRequest {
 	return {
 		type: types.LOGIN.REQUEST,
 		credentials,
+		posuserinfor,
 		logoutOnError,
 		isFromWebView
 	};
 }
 
-export function loginSuccess(user: Partial<IUser>): ILoginSuccess {
+export function loginSuccess(user: Partial<IUser>, posuserinfor: Partial<IuserPos>): ILoginSuccess {
 	return {
 		type: types.LOGIN.SUCCESS,
-		user
+		user,
+		posuserinfor
 	};
 }
 
