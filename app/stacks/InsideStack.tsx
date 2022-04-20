@@ -67,6 +67,7 @@ import AddChannelTeamView from '../views/AddChannelTeamView';
 import AddExistingChannelView from '../views/AddExistingChannelView';
 import SelectListView from '../views/SelectListView';
 import DiscussionsView from '../views/DiscussionsView';
+import OutsideStack from './OutsideStack';
 import {
 	AdminPanelStackParamList,
 	ChatsStackParamList,
@@ -79,7 +80,6 @@ import {
 	ProfileStackParamList,
 	SettingsStackParamList
 } from './types';
-
 // ChatsStackNavigator
 const ChatsStack = createStackNavigator<ChatsStackParamList>();
 const ChatsStackNavigator = () => {
@@ -140,6 +140,7 @@ const ChatsStackNavigator = () => {
 			<ChatsStack.Screen name='QueueListView' component={QueueListView} options={QueueListView.navigationOptions} />
 			<ChatsStack.Screen name='CannedResponsesListView' component={CannedResponsesListView} />
 			<ChatsStack.Screen name='CannedResponseDetail' component={CannedResponseDetail} />
+			<ChatsStack.Screen name='OutsideStack' component={OutsideStack} options={{ headerShown: false }} />
 		</ChatsStack.Navigator>
 	);
 };

@@ -109,6 +109,7 @@
 		"react-native-progress": "4.1.2",
 		"react-native-prompt-android": "^1.1.0",
 		"react-native-reanimated": "2.2.2",
+		"react-native-render-html": "^6.3.4",
 		"react-native-restart": "0.0.22",
 		"react-native-safe-area-context": "3.2.0",
 		"react-native-screens": "2.9.0",

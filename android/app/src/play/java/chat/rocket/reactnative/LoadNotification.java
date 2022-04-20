@@ -59,7 +59,6 @@ public class LoadNotification {
 
         final String userId = ejson.userId();
         final String userToken = ejson.token();
-
         if (userId == null || userToken == null) {
             return;
         }
