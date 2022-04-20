@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.oshimachat.generated.BasePackageList;
 import com.oshimachat.networking.SSLPinningPackage;
-
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(new BasePackageList().getPackageList(), null);

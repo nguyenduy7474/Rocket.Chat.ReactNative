@@ -221,7 +221,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		console.timeEnd(`${this.constructor.name} mount`);
 	}
 
-	componentWillMount() {
+	/* 	componentWillMount() {
 		this.initNotification();
 	}
 
@@ -229,13 +229,14 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		messaging()
 			.getInitialNotification()
 			.then(remoteMessage => {
+				console.info("remoteMessage: ", remoteMessage)
 				this.onReceived(remoteMessage);
 			});
 	};
 
 	onReceived = (notification: any) => {
 		console.info('notification: ', notification);
-	};
+	}; */
 
 	_checkPermission = async () => {
 		const enabled = await messaging().hasPermission();
@@ -502,6 +503,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 			headerRight: () =>
 				searching ? null : (
 					<HeaderButton.Container>
+						<HeaderButton.Item iconName='home' onPress={this.initHome} testID='rooms-list-view-home' />
 						{canCreateRoom ? (
 							<HeaderButton.Item iconName='create' onPress={this.goToNewMessage} testID='rooms-list-view-create-channel' />
 						) : null}
@@ -672,6 +674,12 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 			this.search('');
 			this.setHeader();
 		});
+	};
+
+	initHome = () => {
+		const url = 'https://crm.oshima.vn/my-task';
+		const { navigation } = this.props;
+		navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'My task' } });
 	};
 
 	cancelSearch = () => {

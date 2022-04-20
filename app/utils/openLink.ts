@@ -1,21 +1,21 @@
 import { Linking } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import parse from 'url-parse';
+// import parse from 'url-parse';
 
 import { themes } from '../lib/constants';
 import { TSupportedThemes } from '../theme';
-import UserPreferences from '../lib/methods/userPreferences';
+// import UserPreferences from '../lib/methods/userPreferences';
 
 export const DEFAULT_BROWSER_KEY = 'DEFAULT_BROWSER_KEY';
 
-const scheme = {
+/* const scheme = {
 	chrome: 'googlechrome:',
 	chromeSecure: 'googlechromes:',
 	firefox: 'firefox:',
 	brave: 'brave:'
-};
+}; */
 
-const appSchemeURL = (url: string, browser: string): string => {
+/* const appSchemeURL = (url: string, browser: string): string => {
 	let schemeUrl = url;
 	const parsedUrl = parse(url, true);
 	const { protocol } = parsedUrl;
@@ -34,13 +34,19 @@ const appSchemeURL = (url: string, browser: string): string => {
 	}
 
 	return schemeUrl;
-};
+}; */
 
 const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise<void> => {
 	try {
-		const browser = UserPreferences.getString(DEFAULT_BROWSER_KEY);
-
-		if (browser === 'inApp') {
+		// const browser = UserPreferences.getString(DEFAULT_BROWSER_KEY);
+		await WebBrowser.openBrowserAsync(url, {
+			toolbarColor: themes[theme].headerBackground,
+			controlsColor: themes[theme].headerTintColor,
+			// https://github.com/expo/expo/pull/4923
+			enableBarCollapsing: true,
+			showTitle: true
+		});
+		/* 		if (browser === 'inApp') {
 			await WebBrowser.openBrowserAsync(url, {
 				toolbarColor: themes[theme].headerBackground,
 				controlsColor: themes[theme].headerTintColor,
@@ -51,7 +57,7 @@ const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise
 		} else {
 			const schemeUrl = appSchemeURL(url, browser!.replace(':', ''));
 			await Linking.openURL(schemeUrl);
-		}
+		} */
 	} catch {
 		try {
 			await Linking.openURL(url);

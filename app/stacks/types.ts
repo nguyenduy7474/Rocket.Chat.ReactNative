@@ -154,6 +154,10 @@ export type ChatsStackParamList = {
 		cannedResponse: ICannedResponse;
 		room: ISubscription;
 	};
+	OutsideStack: {
+		params: any;
+		screen: string;
+	};
 };
 
 export type ProfileStackParamList = {

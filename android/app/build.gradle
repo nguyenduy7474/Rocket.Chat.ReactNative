@@ -3,7 +3,7 @@ def isFoss = taskRequests.contains("foss")
 
 apply plugin: "com.android.application"
 apply plugin: 'kotlin-android'
-apply plugin: 'com.google.gms.google-services'
+
 
 if (!isFoss) {
     apply plugin: 'com.google.firebase.crashlytics'
@@ -334,4 +334,4 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 //if (!isFoss) {
 //    apply plugin: 'com.google.gms.google-services'
 //}
-
+apply plugin: 'com.google.gms.google-services'
