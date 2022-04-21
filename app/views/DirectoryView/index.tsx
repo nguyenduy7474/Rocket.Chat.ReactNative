@@ -87,11 +87,12 @@ class DirectoryView extends React.Component<IDirectoryViewProps, any> {
 		}
 
 		this.setState({ loading: true });
-
 		try {
 			const { data, type, globalUsers } = this.state;
-			const query = { text, type: 'discussions', workspace: globalUsers ? 'all' : 'local' };
-			console.info(type);
+			const query = { text, type, workspace: globalUsers ? 'all' : 'local' };
+			if (type === 'users') {
+				query.workspace = 'local';
+			}
 			const directories = await RocketChat.getDirectory({
 				query,
 				offset: data.length,
@@ -108,6 +109,7 @@ class DirectoryView extends React.Component<IDirectoryViewProps, any> {
 				this.setState({ loading: false });
 			}
 		} catch (e) {
+			log('not ok man');
 			log(e);
 			this.setState({ loading: false });
 		}
