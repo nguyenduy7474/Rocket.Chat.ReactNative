@@ -25,6 +25,11 @@ export const LANGUAGES: ILanguage[] = [
 		file: () => require('./locales/en.json')
 	},
 	{
+		label: 'Vietnamese',
+		value: 'vi',
+		file: () => require('./locales/vi.json')
+	},
+	{
 		label: '简体中文',
 		value: 'zh-CN',
 		file: () => require('./locales/zh-CN.json')
