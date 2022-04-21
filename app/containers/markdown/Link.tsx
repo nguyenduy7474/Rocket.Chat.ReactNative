@@ -16,15 +16,19 @@ interface ILink {
 	link: string;
 	theme: TSupportedThemes;
 	onLinkPress?: TOnLinkPress;
+	toggleModal?: any;
 }
 
-const Link = React.memo(({ children, link, theme, onLinkPress }: ILink) => {
+const Link = React.memo(({ children, link, theme, onLinkPress, toggleModal }: ILink) => {
 	const handlePress = () => {
 		if (!link) {
 			return;
 		}
 		if (onLinkPress) {
 			return onLinkPress(link);
+		}
+		if (toggleModal) {
+			toggleModal();
 		}
 		openLink(link, theme);
 	};

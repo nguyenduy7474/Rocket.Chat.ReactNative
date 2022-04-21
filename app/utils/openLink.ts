@@ -1,9 +1,9 @@
 import { Linking } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
 // import parse from 'url-parse';
 
-import { themes } from '../lib/constants';
-import { TSupportedThemes } from '../theme';
+// import { themes } from '../lib/constants';
+// import { TSupportedThemes } from '../theme';
+import Navigation from '../lib/navigation/appNavigation';
 // import UserPreferences from '../lib/methods/userPreferences';
 
 export const DEFAULT_BROWSER_KEY = 'DEFAULT_BROWSER_KEY';
@@ -35,10 +35,11 @@ export const DEFAULT_BROWSER_KEY = 'DEFAULT_BROWSER_KEY';
 
 	return schemeUrl;
 }; */
-
-const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise<void> => {
+// const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise<void> => {
+const openLink = async (url: string): Promise<void> => {
 	try {
-		// const browser = UserPreferences.getString(DEFAULT_BROWSER_KEY);
+		Navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'Oshima WebView' } });
+		/* const browser = UserPreferences.getString(DEFAULT_BROWSER_KEY);
 		await WebBrowser.openBrowserAsync(url, {
 			toolbarColor: themes[theme].headerBackground,
 			controlsColor: themes[theme].headerTintColor,
@@ -46,7 +47,7 @@ const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise
 			enableBarCollapsing: true,
 			showTitle: true
 		});
-		/* 		if (browser === 'inApp') {
+		if (browser === 'inApp') {
 			await WebBrowser.openBrowserAsync(url, {
 				toolbarColor: themes[theme].headerBackground,
 				controlsColor: themes[theme].headerTintColor,

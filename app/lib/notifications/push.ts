@@ -46,15 +46,11 @@ class PushNotification {
 
 		Notifications.events().registerNotificationReceivedForeground(
 			(notification: Notification, completion: (response: NotificationCompletion) => void) => {
-				console.info('vao day kghong');
-				console.log('????');
 				completion({ alert: false, sound: false, badge: false });
 			}
 		);
 
 		Notifications.events().registerNotificationOpened((notification: Notification, completion: () => void) => {
-			console.info('vao day kghong212121');
-			console.log('????');
 			if (isIOS) {
 				const { background } = reduxStore.getState().app;
 				if (background) {
@@ -68,8 +64,6 @@ class PushNotification {
 
 		Notifications.events().registerNotificationReceivedBackground(
 			(notification: Notification, completion: (response: any) => void) => {
-				console.log('????');
-				console.info('sdaskdhaslkdjash');
 				completion({ alert: true, sound: true, badge: false });
 			}
 		);
