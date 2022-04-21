@@ -48,6 +48,7 @@ interface IMarkdownProps {
 	testID?: string;
 	style?: StyleProp<TextStyle>[];
 	onLinkPress?: TOnLinkPress;
+	toggleModal?: any;
 }
 
 type TLiteral = {
@@ -224,9 +225,9 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 	};
 
 	renderLink = ({ children, href }: any) => {
-		const { theme, onLinkPress } = this.props;
+		const { theme, onLinkPress, toggleModal } = this.props;
 		return (
-			<MarkdownLink link={href} theme={theme} onLinkPress={onLinkPress}>
+			<MarkdownLink link={href} theme={theme} onLinkPress={onLinkPress} toggleModal={toggleModal}>
 				{children}
 			</MarkdownLink>
 		);

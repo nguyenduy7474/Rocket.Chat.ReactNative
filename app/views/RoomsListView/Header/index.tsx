@@ -49,7 +49,6 @@ class RoomsListHeaderView extends PureComponent<IRoomsListHeaderViewProps, any> 
 	};
 
 	onPress = () => {
-		console.info('?????');
 		logEvent(events.RL_TOGGLE_SERVER_DROPDOWN);
 		const { showServerDropdown, dispatch } = this.props;
 		if (showServerDropdown) {
