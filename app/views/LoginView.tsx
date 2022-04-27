@@ -158,7 +158,8 @@ class LoginView extends React.Component<ILoginViewProps, any> {
 			Accounts_RegistrationForm_LinkReplacementText,
 			isFetching,
 			theme,
-			Accounts_ShowFormLogin
+			Accounts_ShowFormLogin,
+			navigation
 		} = this.props;
 
 		if (!Accounts_ShowFormLogin) {
@@ -210,6 +211,7 @@ class LoginView extends React.Component<ILoginViewProps, any> {
 					theme={theme}
 					style={styles.loginButton}
 				/>
+				<LoginServices separator={Accounts_ShowFormLogin} navigation={navigation} theme={theme} />
 				{Accounts_PasswordReset && (
 					<Button
 						title={I18n.t('Forgot_password')}
@@ -243,13 +245,10 @@ class LoginView extends React.Component<ILoginViewProps, any> {
 	};
 
 	render() {
-		const { Accounts_ShowFormLogin, theme, navigation } = this.props;
+		// const { Accounts_ShowFormLogin, theme, navigation } = this.props;
 		return (
 			<FormContainer testID='login-view'>
-				<FormContainerInner>
-					<LoginServices separator={Accounts_ShowFormLogin} navigation={navigation} theme={theme} />
-					{this.renderUserForm()}
-				</FormContainerInner>
+				<FormContainerInner>{this.renderUserForm()}</FormContainerInner>
 			</FormContainer>
 		);
 	}

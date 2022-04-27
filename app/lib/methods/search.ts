@@ -15,11 +15,10 @@ export const localSearch = async ({ text = '', filterUsers = true, filterRooms =
 	let subscriptions = await db
 		.get('subscriptions')
 		.query(
-			Q.or(Q.where('name', Q.like(`%${likeString}%`)), Q.where('fname', Q.like(`%${likeString}%`))),
-			Q.experimentalSortBy('room_updated_at', Q.desc)
+			Q.or(Q.where('name', Q.like(`%${likeString}%`)), Q.where('fname', Q.like(`%${likeString}%`)))
+			/* Q.experimentalSortBy('room_updated_at', Q.desc) */
 		)
 		.fetch();
-
 	if (filterUsers && !filterRooms) {
 		subscriptions = subscriptions.filter(item => item.t === 'd' && !isGroupChat(item));
 	} else if (!filterUsers && filterRooms) {
@@ -27,7 +26,6 @@ export const localSearch = async ({ text = '', filterUsers = true, filterRooms =
 	}
 
 	const sliceSubscriptions = subscriptions.slice(0, 7);
-
 	const search = sliceSubscriptions.map(sub => ({
 		rid: sub.rid,
 		name: sub.name,
@@ -48,19 +46,16 @@ export const search = async ({ text = '', filterUsers = true, filterRooms = true
 	if (debounce) {
 		debounce('cancel');
 	}
-
 	const localSearchData = await localSearch({ text, filterUsers, filterRooms });
 	const usernames = localSearchData.map(sub => sub.name);
 
 	const data = localSearchData as (ISearch | ISearchLocal)[];
-
 	try {
 		if (localSearchData.length < 7) {
 			const { users, rooms } = (await Promise.race([
 				spotlight(searchText, usernames, { users: filterUsers, rooms: filterRooms }),
 				new Promise((resolve, reject) => (debounce = reject))
 			])) as { users: ISearch[]; rooms: ISearch[] };
-
 			if (filterUsers) {
 				users
 					.filter((item1, index) => users.findIndex(item2 => item2._id === item1._id) === index) // Remove duplicated data from response

@@ -57,7 +57,7 @@ const AttachedActions = ({ attachment }: { attachment: IAttachment }) => {
 };
 
 const Attachments: React.FC<IMessageAttachments> = React.memo(
-	({ attachments, timeFormat, showAttachment, style, getCustomEmoji, isReply }: IMessageAttachments) => {
+	({ attachments, timeFormat, showAttachment, style, getCustomEmoji, isReply, checkauthor }: IMessageAttachments) => {
 		const { theme } = useTheme();
 
 		if (!attachments || attachments.length === 0) {
@@ -105,8 +105,16 @@ const Attachments: React.FC<IMessageAttachments> = React.memo(
 					<CollapsibleQuote key={index} index={index} attachment={file} timeFormat={timeFormat} getCustomEmoji={getCustomEmoji} />
 				);
 			}
-
-			return <Reply key={index} index={index} attachment={file} timeFormat={timeFormat} getCustomEmoji={getCustomEmoji} />;
+			return (
+				<Reply
+					key={index}
+					index={index}
+					attachment={file}
+					timeFormat={timeFormat}
+					getCustomEmoji={getCustomEmoji}
+					checkauthor={checkauthor}
+				/>
+			);
 		});
 		return <>{attachmentsElements}</>;
 	},

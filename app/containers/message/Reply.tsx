@@ -27,12 +27,28 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		borderLeftWidth: 2
 	},
+	buttonOwn: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginVertical: 4,
+		alignSelf: 'flex-start',
+		borderRightWidth: 2
+	},
 	attachmentContainer: {
 		flex: 1,
 		borderRadius: 4,
 		flexDirection: 'column',
 		paddingVertical: 4,
 		paddingLeft: 8
+	},
+	attachmentContainerOwn: {
+		flex: 1,
+		borderRadius: 4,
+		flexDirection: 'column',
+		paddingVertical: 4,
+		paddingRight: 8,
+		alignItems: 'flex-end'
 	},
 	backdrop: {
 		...StyleSheet.absoluteFillObject
@@ -96,17 +112,34 @@ interface IMessageReply {
 	timeFormat?: string;
 	index: number;
 	getCustomEmoji: TGetCustomEmoji;
+	checkauthor: any;
 }
 
 const Title = React.memo(
-	({ attachment, timeFormat, theme }: { attachment: IAttachment; timeFormat?: string; theme: TSupportedThemes }) => {
+	({
+		attachment,
+		timeFormat,
+		theme,
+		checkauthor
+	}: {
+		attachment: IAttachment;
+		timeFormat?: string;
+		theme: TSupportedThemes;
+		checkauthor: any;
+	}) => {
 		const time = attachment.message_link && attachment.ts ? moment(attachment.ts).format(timeFormat) : null;
+		let title;
+		if (checkauthor === 'true') {
+			title = <Text style={[styles.title, { color: themes[theme].bodyText, textAlign: 'right' }]}>{attachment.title}</Text>;
+		} else {
+			title = <Text style={[styles.title, { color: themes[theme].bodyText }]}>{attachment.title}</Text>;
+		}
 		return (
 			<View style={styles.authorContainer}>
 				{attachment.author_name ? (
 					<Text style={[styles.author, { color: themes[theme].auxiliaryTintColor }]}>{attachment.author_name}</Text>
 				) : null}
-				{attachment.title ? <Text style={[styles.title, { color: themes[theme].bodyText }]}>{attachment.title}</Text> : null}
+				{attachment.title ? title : null}
 				{time ? <Text style={[styles.time, { color: themes[theme].auxiliaryTintColor }]}>{time}</Text> : null}
 			</View>
 		);
@@ -207,7 +240,7 @@ const Fields = React.memo(
 );
 
 const Reply = React.memo(
-	({ attachment, timeFormat, index, getCustomEmoji }: IMessageReply) => {
+	({ attachment, timeFormat, index, getCustomEmoji, checkauthor }: IMessageReply) => {
 		const [loading, setLoading] = useState(false);
 		const { theme } = useTheme();
 		const { baseUrl, user, jumpToMessage } = useContext(MessageContext);
@@ -238,23 +271,33 @@ const Reply = React.memo(
 		if (attachment.color) {
 			borderColor = attachment.color;
 		}
-
 		return (
 			<>
 				<Touchable
 					onPress={onPress}
-					style={[
-						styles.button,
-						index > 0 && styles.marginTop,
-						attachment.description && styles.marginBottom,
-						{
-							borderColor
-						}
-					]}
+					style={
+						checkauthor === 'true'
+							? [
+									styles.buttonOwn,
+									index > 0 && styles.marginTop,
+									attachment.description && styles.marginBottom,
+									{
+										borderColor
+									}
+							  ]
+							: [
+									styles.button,
+									index > 0 && styles.marginTop,
+									attachment.description && styles.marginBottom,
+									{
+										borderColor
+									}
+							  ]
+					}
 					background={Touchable.Ripple(themes[theme].bannerBackground)}
 					disabled={loading}>
-					<View style={styles.attachmentContainer}>
-						<Title attachment={attachment} timeFormat={timeFormat} theme={theme} />
+					<View style={checkauthor === 'true' ? styles.attachmentContainerOwn : styles.attachmentContainer}>
+						<Title attachment={attachment} timeFormat={timeFormat} theme={theme} checkauthor={checkauthor} />
 						<Attachments
 							attachments={attachment.attachments}
 							getCustomEmoji={getCustomEmoji}

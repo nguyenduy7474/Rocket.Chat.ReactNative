@@ -20,12 +20,19 @@ interface IMessageBoxMentionItem {
 		id: string;
 		shortcut: string;
 		text: string;
+		fname: string;
+		lastMessage: any;
 	} & IEmoji;
 	trackingType: string;
 }
 
 const MentionItemContent = React.memo(({ trackingType, item }: IMessageBoxMentionItem) => {
 	const { theme } = useTheme();
+	/* console.info(item)
+	let nameView = item.fname
+	if(item.lastMessage && item.lastMessage.u && nameView.indexOf("oshima.vn") != -1){
+		nameView = item.lastMessage.u.name
+	} */
 	switch (trackingType) {
 		case MENTIONS_TRACKING_TYPE_EMOJIS:
 			return (
@@ -50,12 +57,11 @@ const MentionItemContent = React.memo(({ trackingType, item }: IMessageBoxMentio
 					</Text>
 				</>
 			);
-
 		default:
 			return (
 				<>
 					<Avatar style={styles.avatar} text={item.username || item.name} size={30} type={item.t} />
-					<Text style={[styles.mentionText, { color: themes[theme].titleText }]}>{item.username || item.name || item}</Text>
+					<Text style={[styles.mentionText, { color: themes[theme].titleText }]}>{item.fname || item.name}</Text>
 				</>
 			);
 	}

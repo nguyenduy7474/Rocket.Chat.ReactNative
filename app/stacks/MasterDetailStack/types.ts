@@ -179,6 +179,10 @@ export type ModalStackParamList = {
 	UserNotificationPrefView: undefined;
 	SecurityPrivacyView: undefined;
 	E2EEncryptionSecurityView: undefined;
+	AuthenticationWebView: {
+		url: string;
+		authType: string;
+	};
 };
 
 export type MasterDetailInsideStackParamList = {

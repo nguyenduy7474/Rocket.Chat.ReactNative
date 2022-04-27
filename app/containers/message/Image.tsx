@@ -20,6 +20,7 @@ interface IMessageButton {
 	disabled?: boolean;
 	onPress: () => void;
 	theme: TSupportedThemes;
+	style?: any;
 }
 
 interface IMessageImage {
@@ -33,11 +34,11 @@ interface IMessageImage {
 
 const ImageProgress = createImageProgress(FastImage);
 
-const Button = React.memo(({ children, onPress, disabled, theme }: IMessageButton) => (
+const Button = React.memo(({ children, onPress, disabled, theme, style }: IMessageButton) => (
 	<Touchable
 		disabled={disabled}
 		onPress={onPress}
-		style={styles.imageContainer}
+		style={style || styles.imageContainer}
 		background={Touchable.Ripple(themes[theme].bannerBackground)}>
 		{children}
 	</Touchable>
@@ -90,9 +91,8 @@ const ImageContainer = React.memo(
 				</Button>
 			);
 		}
-
 		return (
-			<Button disabled={isReply} theme={theme} onPress={onPress}>
+			<Button disabled={isReply} theme={theme} onPress={onPress} style={{ width: '100%' }}>
 				<MessageImage imgUri={img} theme={theme} />
 			</Button>
 		);

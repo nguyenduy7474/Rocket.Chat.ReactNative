@@ -14,6 +14,7 @@ export interface IMessageAttachments {
 	isReply?: boolean;
 	showAttachment?: (file: IAttachment) => void;
 	getCustomEmoji: TGetCustomEmoji;
+	checkauthor: any;
 }
 
 export interface IMessageAvatar {
@@ -24,6 +25,7 @@ export interface IMessageAvatar {
 	small?: boolean;
 	navToRoomInfo: (navParam: IRoomInfoParam) => void;
 	getCustomEmoji: TGetCustomEmoji;
+	checkauthor: any;
 }
 
 export interface IMessageBlocks {
@@ -59,6 +61,9 @@ export interface IMessageContent {
 	useRealName?: boolean;
 	isIgnored: boolean;
 	type: string;
+	checkauthor: string;
+	authorId: string;
+	userId: string;
 }
 
 export interface IMessageEmoji {
@@ -104,6 +109,7 @@ export interface IMessageInner
 	type: MessageType;
 	blocks: [];
 	urls?: IUrl[];
+	checkauthor: string;
 }
 
 export interface IMessage extends IMessageRepliedThread, IMessageInner, IMessageAvatar {
@@ -121,4 +127,5 @@ export interface IMessage extends IMessageRepliedThread, IMessageInner, IMessage
 	isIgnored: boolean;
 	dcount: number | undefined;
 	dlm: string | Date | undefined;
+	userId: string;
 }

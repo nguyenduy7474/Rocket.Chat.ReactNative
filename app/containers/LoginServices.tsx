@@ -418,17 +418,17 @@ class LoginServices extends React.PureComponent<ILoginServicesProps, ILoginServi
 		if (length > 3 && separator) {
 			return (
 				<>
+					{/* {this.renderServicesSeparator()} */}
 					<Animated.View style={style}>
 						{Object.values(services).map((service: IItemService) => this.renderItem(service))}
 					</Animated.View>
-					{this.renderServicesSeparator()}
 				</>
 			);
 		}
 		return (
 			<>
+				{/* {this.renderServicesSeparator()} */}
 				{Object.values(services).map((service: IItemService) => this.renderItem(service))}
-				{this.renderServicesSeparator()}
 			</>
 		);
 	}

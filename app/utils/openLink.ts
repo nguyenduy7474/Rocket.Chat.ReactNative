@@ -1,4 +1,4 @@
-import { Linking } from 'react-native';
+// import { Linking } from 'react-native';
 // import parse from 'url-parse';
 
 // import { themes } from '../lib/constants';
@@ -36,9 +36,10 @@ export const DEFAULT_BROWSER_KEY = 'DEFAULT_BROWSER_KEY';
 	return schemeUrl;
 }; */
 // const openLink = async (url: string, theme: TSupportedThemes = 'light'): Promise<void> => {
-const openLink = async (url: string): Promise<void> => {
+const openLink = (url: string) => {
 	try {
-		Navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'Oshima WebView' } });
+		Navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'Oshima WebView' } }); // mobile
+		Navigation.navigate('ModalStackNavigator', { screen: 'AuthenticationWebView', params: { url, authType: 'My task' } }); // table
 		/* const browser = UserPreferences.getString(DEFAULT_BROWSER_KEY);
 		await WebBrowser.openBrowserAsync(url, {
 			toolbarColor: themes[theme].headerBackground,
@@ -59,9 +60,9 @@ const openLink = async (url: string): Promise<void> => {
 			const schemeUrl = appSchemeURL(url, browser!.replace(':', ''));
 			await Linking.openURL(schemeUrl);
 		} */
-	} catch {
+	} catch (err) {
 		try {
-			await Linking.openURL(url);
+			// await Linking.openURL(url);
 		} catch {
 			// do nothing
 		}

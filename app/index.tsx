@@ -127,9 +127,7 @@ export default class Root extends React.Component<{}, IState> {
 		store.dispatch(appInitLocalSettings());
 
 		// Open app from push notification
-		console.info('???????');
 		const notification = await initializePushNotifications();
-		console.info(notification);
 		if (notification) {
 			onNotification(notification);
 			return;

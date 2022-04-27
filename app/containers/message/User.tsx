@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'space-between',
 		alignItems: 'center'
 	},
 	username: {
@@ -32,6 +31,12 @@ const styles = StyleSheet.create({
 		flexShrink: 1,
 		flexDirection: 'row',
 		alignItems: 'center'
+	},
+	titleContainerOwn: {
+		flexShrink: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 10
 	},
 	alias: {
 		fontSize: 14,
@@ -53,10 +58,25 @@ interface IMessageUser {
 	timeFormat?: string;
 	navToRoomInfo?: (navParam: IRoomInfoParam) => void;
 	type: string;
+	userId: string;
+	checkauthor: any;
 }
 
 const User = React.memo(
-	({ isHeader, useRealName, author, alias, ts, timeFormat, hasError, navToRoomInfo, type, ...props }: IMessageUser) => {
+	({
+		isHeader,
+		useRealName,
+		author,
+		alias,
+		ts,
+		timeFormat,
+		hasError,
+		navToRoomInfo,
+		type,
+		userId,
+		checkauthor,
+		...props
+	}: IMessageUser) => {
 		const { user } = useContext(MessageContext);
 		const { theme } = useTheme();
 
@@ -94,14 +114,35 @@ const User = React.memo(
 			}
 
 			return (
-				<View style={styles.container}>
-					<TouchableOpacity style={styles.titleContainer} onPress={onUserPress} disabled={isDisabled}>
-						<Text style={[styles.username, { color: themes[theme].titleText }]} numberOfLines={1}>
+				<View style={[styles.container, {}]}>
+					{checkauthor === 'true' ? ( // message own by this user
+						<>
+							<Text style={[messageStyles.time, { color: themes[theme].auxiliaryTintColor }]}>{time}</Text>
+							{hasError ? <MessageError hasError={hasError} {...props} /> : null}
+							<TouchableOpacity style={styles.titleContainerOwn} onPress={onUserPress} disabled={isDisabled}>
+								<Text style={[styles.username, { color: themes[theme].titleText }]} numberOfLines={1}>
+									{textContent}
+								</Text>
+							</TouchableOpacity>
+						</>
+					) : (
+						<>
+							<TouchableOpacity style={styles.titleContainer} onPress={onUserPress} disabled={isDisabled}>
+								<Text style={[styles.username, { color: themes[theme].titleText }]} numberOfLines={1}>
+									{textContent}
+								</Text>
+							</TouchableOpacity>
+							<Text style={[messageStyles.time, { color: themes[theme].auxiliaryTintColor }]}>{time}</Text>
+							{hasError ? <MessageError hasError={hasError} {...props} /> : null}
+						</>
+					)}
+					{/* 							<TouchableOpacity style={styles.titleContainer} onPress={onUserPress} disabled={isDisabled}>
+							<Text style={[styles.username, { color: themes[theme].titleText }]} numberOfLines={1}>
 							{textContent}
-						</Text>
-					</TouchableOpacity>
-					<Text style={[messageStyles.time, { color: themes[theme].auxiliaryTintColor }]}>{time}</Text>
-					{hasError ? <MessageError hasError={hasError} {...props} /> : null}
+								</Text>
+							</TouchableOpacity>
+							<Text style={[messageStyles.time, { color: themes[theme].auxiliaryTintColor }]}>{time}</Text>
+							{hasError ? <MessageError hasError={hasError} {...props} /> : null} */}
 				</View>
 			);
 		}

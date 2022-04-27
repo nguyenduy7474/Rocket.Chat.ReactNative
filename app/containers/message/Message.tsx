@@ -24,7 +24,6 @@ import { useTheme } from '../../theme';
 const MessageInner = React.memo((props: IMessageInner) => {
 	const { attachments } = props;
 	const isCollapsible = attachments ? attachments[0] && attachments[0].collapsed : false;
-
 	if (props.type === 'discussion-created') {
 		return (
 			<>
@@ -33,7 +32,6 @@ const MessageInner = React.memo((props: IMessageInner) => {
 			</>
 		);
 	}
-
 	if (props.type === 'jitsi_call_started') {
 		return (
 			<>
@@ -43,7 +41,6 @@ const MessageInner = React.memo((props: IMessageInner) => {
 			</>
 		);
 	}
-
 	if (props.blocks && props.blocks.length) {
 		return (
 			<>
@@ -54,7 +51,6 @@ const MessageInner = React.memo((props: IMessageInner) => {
 			</>
 		);
 	}
-
 	return (
 		<>
 			<User {...props} />
@@ -80,6 +76,8 @@ const MessageInner = React.memo((props: IMessageInner) => {
 MessageInner.displayName = 'MessageInner';
 
 const Message = React.memo((props: IMessage) => {
+	const { author, userId } = props;
+
 	if (props.isThreadReply || props.isThreadSequential || props.isInfo || props.isIgnored) {
 		const thread = props.isThreadReply ? <RepliedThread {...props} /> : null;
 		return (
@@ -94,15 +92,30 @@ const Message = React.memo((props: IMessage) => {
 			</View>
 		);
 	}
-
 	return (
 		<View style={[styles.container, props.style]}>
 			<View style={styles.flex}>
-				<MessageAvatar {...props} />
-				<View style={[styles.messageContent, props.isHeader && styles.messageContentWithHeader]}>
-					<MessageInner {...props} />
-				</View>
+				{author?._id === userId ? ( // message own by this user
+					<>
+						<View style={[styles.messageContentOwn, props.isHeader && styles.messageContentWithHeaderOwn]}>
+							<MessageInner {...props} checkauthor={'true'} />
+						</View>
+						<MessageAvatar {...props} checkauthor={'true'} />
+					</>
+				) : (
+					<>
+						<MessageAvatar {...props} />
+						<View style={[styles.messageContent, props.isHeader && styles.messageContentWithHeader]}>
+							<MessageInner {...props} checkauthor={'false'} />
+						</View>
+					</>
+				)}
 				<ReadReceipt isReadReceiptEnabled={props.isReadReceiptEnabled} unread={props.unread || false} />
+				{/* 				<MessageAvatar {...props} />
+					<View style={[styles.messageContent, props.isHeader && styles.messageContentWithHeader]}>
+						<MessageInner {...props} />
+					</View>
+				<ReadReceipt isReadReceiptEnabled={props.isReadReceiptEnabled} unread={props.unread || false} /> */}
 			</View>
 		</View>
 	);

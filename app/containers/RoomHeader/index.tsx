@@ -28,6 +28,7 @@ interface IRoomHeaderContainerProps {
 	isGroupChat: boolean;
 	testID: string;
 	sourceType?: IOmnichannelSource;
+	isMasterDetail: boolean;
 }
 
 class RoomHeaderContainer extends Component<IRoomHeaderContainerProps, any> {
@@ -108,7 +109,8 @@ class RoomHeaderContainer extends Component<IRoomHeaderContainerProps, any> {
 			parentTitle,
 			isGroupChat,
 			testID,
-			sourceType
+			sourceType,
+			isMasterDetail
 		} = this.props;
 
 		let subtitle;
@@ -137,6 +139,7 @@ class RoomHeaderContainer extends Component<IRoomHeaderContainerProps, any> {
 				testID={testID}
 				onPress={onPress}
 				sourceType={sourceType}
+				isMasterDetail={isMasterDetail}
 			/>
 		);
 	}

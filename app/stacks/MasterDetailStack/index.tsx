@@ -66,6 +66,7 @@ import {
 	MasterDetailInsideStackParamList,
 	ModalStackParamList
 } from './types';
+import AuthenticationWebView from '../../views/AuthenticationWebView';
 
 // ChatsStackNavigator
 const ChatsStack = createStackNavigator<MasterDetailChatsStackParamList>();
@@ -231,6 +232,11 @@ const ModalStackNavigator = React.memo(({ navigation }: INavigation) => {
 					name='E2EEncryptionSecurityView'
 					component={E2EEncryptionSecurityView}
 					options={E2EEncryptionSecurityView.navigationOptions}
+				/>
+				<ModalStack.Screen
+					name='AuthenticationWebView'
+					component={AuthenticationWebView}
+					options={AuthenticationWebView.navigationOptions}
 				/>
 			</ModalStack.Navigator>
 		</ModalContainer>

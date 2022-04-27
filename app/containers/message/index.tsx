@@ -435,6 +435,7 @@ class MessageContainer extends React.Component<IMessageContainerProps, IMessageC
 					callJitsi={callJitsi}
 					blockAction={blockAction}
 					highlighted={highlighted}
+					userId={user.id}
 				/>
 			</MessageContext.Provider>
 		);

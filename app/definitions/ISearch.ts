@@ -17,4 +17,5 @@ export interface ISearch extends ISearchLocal {
 	username: string;
 	outside?: boolean;
 	search?: boolean;
+	rid?: any;
 }
