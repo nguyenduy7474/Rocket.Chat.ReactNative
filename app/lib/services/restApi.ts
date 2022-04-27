@@ -826,8 +826,9 @@ export const registerPushToken = () =>
 			};
 			try {
 				// RC 0.60.0
-				const res = await sdk.post('push.token', data);
-				console.info(res);
+				await sdk.post('push.token', data);
+				// const res = await sdk.post('push.token', data);
+				// console.info(res);
 			} catch (error) {
 				console.log(error);
 			}

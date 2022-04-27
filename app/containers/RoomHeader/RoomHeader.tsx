@@ -55,6 +55,7 @@ type TRoomHeaderHeaderTitle = {
 	prid: string;
 	scale: number;
 	testID: string;
+	isMasterDetail: boolean;
 };
 
 interface IRoomHeader {
@@ -73,6 +74,7 @@ interface IRoomHeader {
 	onPress: () => void;
 	testID: string;
 	sourceType?: IOmnichannelSource;
+	isMasterDetail: boolean;
 }
 
 const SubTitle = React.memo(({ usersTyping, subtitle, renderFunc, scale }: TRoomHeaderSubTitle) => {
@@ -110,6 +112,7 @@ const SubTitle = React.memo(({ usersTyping, subtitle, renderFunc, scale }: TRoom
 const HeaderTitle = React.memo(({ title, tmid, prid, scale, testID }: TRoomHeaderHeaderTitle) => {
 	const { theme } = useTheme();
 	const titleStyle = { fontSize: TITLE_SIZE * scale, color: themes[theme].headerTitleColor };
+	title = title.substring(0, 14);
 	if (!tmid && !prid) {
 		return (
 			<Text style={[styles.title, titleStyle]} numberOfLines={1} testID={testID}>
@@ -117,7 +120,6 @@ const HeaderTitle = React.memo(({ title, tmid, prid, scale, testID }: TRoomHeade
 			</Text>
 		);
 	}
-
 	return <MarkdownPreview msg={title} style={[styles.title, titleStyle]} testID={testID} />;
 });
 
@@ -137,7 +139,8 @@ const Header = React.memo(
 		teamMain,
 		testID,
 		usersTyping = [],
-		sourceType
+		sourceType,
+		isMasterDetail
 	}: IRoomHeader) => {
 		const { theme } = useTheme();
 		const portrait = height > width;
@@ -181,7 +184,7 @@ const Header = React.memo(
 							sourceType={sourceType}
 						/>
 					)}
-					<HeaderTitle title={title} tmid={tmid} prid={prid} scale={scale} testID={testID} />
+					<HeaderTitle title={title} tmid={tmid} prid={prid} scale={scale} testID={testID} isMasterDetail={isMasterDetail} />
 				</View>
 				<SubTitle usersTyping={tmid ? [] : usersTyping} subtitle={subtitle} renderFunc={renderFunc} scale={scale} />
 			</TouchableOpacity>

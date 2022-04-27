@@ -17,7 +17,6 @@ const Content = React.memo(
 	(props: IMessageContent) => {
 		const { theme } = useTheme();
 		const { baseUrl, user, onLinkPress } = useContext(MessageContext);
-
 		if (props.isInfo) {
 			// @ts-ignore
 			const infoMessage = getInfoMessage({ ...props });
@@ -41,7 +40,6 @@ const Content = React.memo(
 
 		const isPreview = props.tmid && !props.isThreadRoom;
 		let content = null;
-
 		if (props.isEncrypted) {
 			content = (
 				<Text style={[styles.textInfo, { color: themes[theme].auxiliaryText }]} accessibilityLabel={I18n.t('Encrypted_message')}>
@@ -51,7 +49,7 @@ const Content = React.memo(
 		} else if (isPreview) {
 			content = <MarkdownPreview msg={props.msg} />;
 		} else {
-			content = (
+			const block = (
 				<Markdown
 					msg={props.msg}
 					md={props.md}
@@ -67,8 +65,37 @@ const Content = React.memo(
 					useRealName={props.useRealName}
 					theme={theme}
 					onLinkPress={onLinkPress}
+					checkauthor={props.checkauthor}
 				/>
 			);
+			if (!props.msg) {
+				content = block;
+			} else if (props.checkauthor === 'true') {
+				content = (
+					<View
+						style={{
+							backgroundColor: '#0084ff',
+							padding: 10,
+							borderRadius: 10,
+							maxWidth: '70%'
+						}}>
+						{block}
+					</View>
+				);
+			} else {
+				content = (
+					<View
+						style={{
+							backgroundColor: '#EBEDF0',
+							padding: 10,
+							borderRadius: 10,
+							alignSelf: 'flex-start',
+							maxWidth: '70%'
+						}}>
+						{block}
+					</View>
+				);
+			}
 		}
 
 		// If this is a encrypted message and is not a preview
@@ -85,7 +112,7 @@ const Content = React.memo(
 			content = <Text style={[styles.textInfo, { color: themes[theme].auxiliaryText }]}>{I18n.t('Message_Ignored')}</Text>;
 		}
 
-		return <View style={props.isTemp && styles.temp}>{content}</View>;
+		return <View style={[props.isTemp && styles.temp]}>{content}</View>;
 	},
 	(prevProps, nextProps) => {
 		if (prevProps.isTemp !== nextProps.isTemp) {

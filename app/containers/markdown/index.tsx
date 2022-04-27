@@ -49,6 +49,7 @@ interface IMarkdownProps {
 	style?: StyleProp<TextStyle>[];
 	onLinkPress?: TOnLinkPress;
 	toggleModal?: any;
+	checkauthor: string;
 }
 
 type TLiteral = {
@@ -100,6 +101,9 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 		if (!this.isNewMarkdown) {
 			this.renderer = this.createRenderer();
 		}
+		this.state = {
+			checkauthor: props.checkauthor
+		};
 	}
 
 	createRenderer = () =>
@@ -164,6 +168,34 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 	renderText = ({ context, literal }: { context: []; literal: string }) => {
 		const { numberOfLines, style = [] } = this.props;
 		const defaultStyle = [this.isMessageContainsOnlyEmoji ? styles.textBig : {}, ...context.map(type => styles[type])];
+		/* 		return (
+				<Text accessibilityLabel={literal} style={[styles.text, defaultStyle, ...style]} numberOfLines={numberOfLines}>
+					{literal}
+				</Text>
+		); */
+		if (
+			(this.state.checkauthor && this.state.checkauthor === 'true') ||
+			(this.props.checkauthor && this.props.checkauthor === 'true')
+		) {
+			return (
+				<Text
+					accessibilityLabel={literal}
+					style={[styles.text, defaultStyle, ...style, { color: 'white' }]}
+					numberOfLines={numberOfLines}>
+					{literal}
+				</Text>
+			);
+		}
+		if (this.state.checkauthor || this.props.checkauthor) {
+			return (
+				<Text
+					accessibilityLabel={literal}
+					style={[styles.text, defaultStyle, ...style, { color: 'black' }]}
+					numberOfLines={numberOfLines}>
+					{literal}
+				</Text>
+			);
+		}
 		return (
 			<Text accessibilityLabel={literal} style={[styles.text, defaultStyle, ...style]} numberOfLines={numberOfLines}>
 				{literal}
@@ -271,7 +303,6 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 		if (!isValidURL(src)) {
 			return null;
 		}
-
 		return <Image style={styles.inlineImage} source={{ uri: encodeURI(src) }} />;
 	};
 
@@ -346,13 +377,13 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 			username = '',
 			getCustomEmoji,
 			baseUrl = '',
-			onLinkPress
+			onLinkPress,
+			checkauthor
 		} = this.props;
 
 		if (!msg) {
 			return null;
 		}
-
 		if (this.isNewMarkdown) {
 			return (
 				<NewMarkdown
@@ -365,6 +396,7 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 					channels={channels}
 					navToRoomInfo={navToRoomInfo}
 					onLinkPress={onLinkPress}
+					checkauthor={checkauthor}
 				/>
 			);
 		}

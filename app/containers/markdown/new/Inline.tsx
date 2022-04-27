@@ -17,9 +17,10 @@ import MarkdownContext from './MarkdownContext';
 
 interface IParagraphProps {
 	value: ParagraphProps['value'];
+	checkauthor: any;
 }
 
-const Inline = ({ value }: IParagraphProps) => {
+const Inline = ({ value, checkauthor }: IParagraphProps) => {
 	const { useRealName, username, navToRoomInfo, mentions, channels } = useContext(MarkdownContext);
 	return (
 		<Text style={styles.inline}>
@@ -28,7 +29,7 @@ const Inline = ({ value }: IParagraphProps) => {
 					case 'IMAGE':
 						return <Image value={block.value} />;
 					case 'PLAIN_TEXT':
-						return <Plain value={block.value} />;
+						return <Plain value={block.value} checkauthor={checkauthor} />;
 					case 'BOLD':
 						return <Bold value={block.value} />;
 					case 'STRIKE':

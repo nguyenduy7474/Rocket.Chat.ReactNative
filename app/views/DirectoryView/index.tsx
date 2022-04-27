@@ -283,7 +283,7 @@ class DirectoryView extends React.Component<IDirectoryViewProps, any> {
 		const { data, loading, showOptionsDropdown, type, globalUsers } = this.state;
 		const { isFederationEnabled, theme } = this.props;
 		return (
-			<SafeAreaView style={{ backgroundColor: themes[theme].backgroundColor }} testID='directory-view'>
+			<SafeAreaView style={{ backgroundColor: themes[theme].backgroundColor, flex: 1 }} testID='directory-view'>
 				<StatusBar />
 				<FlatList
 					data={data}
@@ -297,6 +297,7 @@ class DirectoryView extends React.Component<IDirectoryViewProps, any> {
 					keyboardShouldPersistTaps='always'
 					ListFooterComponent={loading ? <ActivityIndicator /> : null}
 					onEndReached={() => this.load({})}
+					removeClippedSubviews={false}
 				/>
 				{showOptionsDropdown ? (
 					<Options

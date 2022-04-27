@@ -102,7 +102,7 @@ interface IRoomItem extends ISubscription {
 }
 
 const INITIAL_NUM_TO_RENDER = isTablet ? 20 : 12;
-const CHATS_HEADER = 'Chats';
+// const CHATS_HEADER = 'Chats';
 const UNREAD_HEADER = 'Unread';
 const FAVORITES_HEADER = 'Favorites';
 const DISCUSSIONS_HEADER = 'Discussions';
@@ -251,8 +251,9 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 				.catch(err => {
 					console.info(err);
 				});
-			// pushToken = await messaging().getToken();
-			// this.props.updatePushKey(this.props.token, pushToken);
+			// const pushToken = await messaging().getToken();
+			// let res = await this.props.updatePushKey(this.props.token, pushToken);
+			// console.info(res)
 		} else this._getPermission();
 	};
 
@@ -575,7 +576,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 			let tempChats = [] as TSubscriptionModel[];
 			let chats = data;
 
-			let chatsUpdate = [];
+			let chatsUpdate: any = [];
 			if (showUnread) {
 				/**
 				 * If unread on top, we trigger re-render based on order changes and sub.alert
@@ -640,14 +641,16 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 			tempChats = this.addRoomsGroup(direct, DM_HEADER, tempChats);
 
 			if (showUnread || showFavorites || isOmnichannelAgent) {
-				tempChats = this.addRoomsGroup(chats, CHATS_HEADER, tempChats);
+				// 	tempChats = this.addRoomsGroup(chats, CHATS_HEADER, tempChats);
 			}
-
+			// console.info("tempChats ")
 			if (this.mounted) {
-				this.internalSetState({
-					chats: tempChats,
-					chatsUpdate,
-					loading: false
+				this.setState({ chats: [], chatsUpdate: [] }, () => {
+					this.internalSetState({
+						chats: tempChats,
+						chatsUpdate,
+						loading: false
+					});
 				});
 			} else {
 				// @ts-ignore
@@ -669,7 +672,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 	initSearching = () => {
 		logEvent(events.RL_SEARCH);
 		const { dispatch } = this.props;
-		this.internalSetState({ searching: true }, () => {
+		this.internalSetState({ searching: true, chats: [] }, () => {
 			dispatch(openSearchHeader());
 			this.search('');
 			this.setHeader();
@@ -678,8 +681,12 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 
 	initHome = () => {
 		const url = 'https://crm.oshima.vn/my-task';
-		const { navigation } = this.props;
-		navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'My task' } });
+		const { navigation, isMasterDetail } = this.props;
+		if (isMasterDetail) {
+			navigation.navigate('ModalStackNavigator', { screen: 'AuthenticationWebView', params: { url, authType: 'My task' } });
+		} else {
+			navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url, authType: 'My task' } });
+		}
 	};
 
 	cancelSearch = () => {
@@ -691,7 +698,6 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		}
 
 		Keyboard.dismiss();
-
 		this.setState({ searching: false, search: [] }, () => {
 			this.setHeader();
 			dispatch(closeSearchHeader());
@@ -699,6 +705,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 				this.scrollToTop();
 			}, 200);
 		});
+		this.getSubscriptions();
 	};
 
 	handleBackPress = () => {
@@ -1081,7 +1088,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		if (loading) {
 			return <ActivityIndicator />;
 		}
-
+		// console.info("wwwwweewqeqweqwewq")
 		return (
 			<FlatList
 				ref={this.getScrollRef}

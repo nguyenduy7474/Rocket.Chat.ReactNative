@@ -450,6 +450,7 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 		let avatar: string | undefined;
 		let visitor: IVisitor | undefined;
 		let sourceType: IOmnichannelSource | undefined;
+		let announcement: any;
 		if ('id' in room) {
 			subtitle = room.topic;
 			t = room.t;
@@ -459,8 +460,8 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 			({ id: userId, token } = user);
 			avatar = room.name;
 			visitor = room.visitor;
+			announcement = room.announcement;
 		}
-
 		if ('source' in room) {
 			t = room.t;
 			sourceType = room.source;
@@ -474,7 +475,19 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 			numIconsRight = 3;
 		}
 		const headerTitlePosition = getHeaderTitlePosition({ insets, numIconsRight });
-
+		let link: string | undefined;
+		if (
+			announcement &&
+			announcement.indexOf('Task link:') !== -1 &&
+			announcement.indexOf('https://crm.oshima.vn/app/task') !== -1
+		) {
+			link = announcement?.substring(
+				announcement?.indexOf('https://crm.oshima.vn/app/task'),
+				announcement?.indexOf('https://crm.oshima.vn/app/task') + 40
+			);
+		} else if (announcement) {
+			announcement = false;
+		}
 		navigation.setOptions({
 			headerShown: true,
 			headerTitleAlign: 'left',
@@ -513,6 +526,7 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 					onPress={this.goRoomActionsView}
 					testID={`room-view-title-${title}`}
 					sourceType={sourceType}
+					isMasterDetail={isMasterDetail}
 				/>
 			),
 			headerRight: () => (
@@ -525,6 +539,8 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 					encrypted={encrypted}
 					navigation={navigation}
 					toggleFollowThread={this.toggleFollowThread}
+					announcement={announcement}
+					link={link}
 				/>
 			)
 		});

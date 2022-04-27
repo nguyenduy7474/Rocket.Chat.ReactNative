@@ -85,7 +85,7 @@ export interface IMessageBoxProps extends IBaseScreen<MasterDetailInsideStackPar
 	threadsEnabled: boolean;
 	isFocused(): boolean;
 	user: IUser;
-	roomType: string;
+	roomType: any;
 	tmid: string;
 	replyWithMention: boolean;
 	FileUpload_MediaTypeWhiteList: string;
@@ -570,7 +570,17 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 	};
 
 	getUsers = debounce(async (keyword: any) => {
-		let res = await RocketChat.search({ text: keyword, filterRooms: false, filterUsers: true });
+		// let res = await RocketChat.search({ text: keyword, filterRooms: false, filterUsers: true, mention: true , rid: this.props.rid});
+		let res = await RocketChat.getRoomMembers({
+			rid: this.props.rid,
+			roomType: this.props.roomType,
+			type: 'all',
+			filter: false,
+			skip: 0,
+			limit: 10,
+			allUsers: true
+		});
+		// console.info(res)
 		res = [...this.getFixedMentions(keyword), ...res];
 		this.setState({ mentions: res, mentionLoading: false });
 	}, 300);

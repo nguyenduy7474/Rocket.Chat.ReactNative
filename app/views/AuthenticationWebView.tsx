@@ -5,6 +5,7 @@ import parse from 'url-parse';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes';
 import { RouteProp } from '@react-navigation/core';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import { OutsideModalParamList } from '../stacks/types';
 import RocketChat from '../lib/rocketchat';
@@ -184,20 +185,22 @@ class AuthenticationWebView extends React.PureComponent<IAuthenticationWebView, 
 		return (
 			<>
 				<StatusBar />
-				<WebView
-					source={{ uri: url }}
-					userAgent={userAgent}
-					// https://github.com/react-native-community/react-native-webview/issues/24#issuecomment-540130141
-					onMessage={({ nativeEvent }) => this.onNavigationStateChange(nativeEvent)}
-					onNavigationStateChange={this.onNavigationStateChange}
-					injectedJavaScript={isIframe ? injectedJavaScript : undefined}
-					onLoadStart={() => {
-						this.setState({ loading: true });
-					}}
-					onLoadEnd={() => {
-						this.setState({ loading: false });
-					}}
-				/>
+				<KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled={Platform.OS === 'android'}>
+					<WebView
+						source={{ uri: url }}
+						userAgent={userAgent}
+						// https://github.com/react-native-community/react-native-webview/issues/24#issuecomment-540130141
+						onMessage={({ nativeEvent }) => this.onNavigationStateChange(nativeEvent)}
+						onNavigationStateChange={this.onNavigationStateChange}
+						injectedJavaScript={isIframe ? injectedJavaScript : undefined}
+						onLoadStart={() => {
+							this.setState({ loading: true });
+						}}
+						onLoadEnd={() => {
+							this.setState({ loading: false });
+						}}
+					/>
+				</KeyboardAvoidingView>
 				{loading ? <ActivityIndicator size='large' absolute /> : null}
 			</>
 		);

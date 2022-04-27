@@ -11,6 +11,9 @@ import { events, logEvent } from '../../utils/log';
 import { isTeamRoom } from '../../utils/room';
 import { IApplicationState, SubscriptionType, TMessageModel, TSubscriptionModel } from '../../definitions';
 import { ChatsStackParamList } from '../../stacks/types';
+// import { StringIterator } from 'lodash';
+// import * as List from '../../containers/List';
+import RocketChat from '../../lib/rocketchat';
 
 interface IRightButtonsProps {
 	userId?: string;
@@ -24,6 +27,9 @@ interface IRightButtonsProps {
 	joined: boolean;
 	encrypted?: boolean;
 	navigation: StackNavigationProp<ChatsStackParamList, 'RoomView'>;
+	announcement: string | undefined;
+	link: string | undefined;
+	room: TSubscriptionModel;
 }
 
 interface IRigthButtonsState {
@@ -31,20 +37,40 @@ interface IRigthButtonsState {
 	tunread: string[];
 	tunreadUser: string[];
 	tunreadGroup: string[];
+	room: any;
 }
 
 class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsState> {
 	private threadSubscription?: Subscription;
 	private subSubscription?: Subscription;
+	rid: string | undefined;
+	t: string;
+	roomObservable: any;
+	subscription: any;
+	mounted: any;
 
 	constructor(props: IRightButtonsProps) {
 		super(props);
+		this.rid = this.props.rid;
+		this.t = this.props.t;
 		this.state = {
 			isFollowingThread: true,
 			tunread: [],
 			tunreadUser: [],
-			tunreadGroup: []
+			tunreadGroup: [],
+			room: { rid: this.rid, t: this.t }
 		};
+		if (this.state.room && this.state.room.observe && this.state.room.rid) {
+			this.roomObservable = this.state.room.observe();
+			this.subscription = this.roomObservable.subscribe((changes: any) => {
+				if (this.mounted) {
+					this.setState({ room: changes });
+				} else {
+					// @ts-ignore
+					this.state.room = changes;
+				}
+			});
+		}
 	}
 
 	async componentDidMount() {
@@ -75,6 +101,7 @@ class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsS
 		if (nextProps.teamId !== teamId) {
 			return true;
 		}
+
 		if (nextState.isFollowingThread !== isFollowingThread) {
 			return true;
 		}
@@ -87,6 +114,10 @@ class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsS
 		if (!dequal(nextState.tunreadGroup, tunreadGroup)) {
 			return true;
 		}
+		if (!dequal(nextState.tunreadGroup, tunreadGroup)) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -174,6 +205,12 @@ class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsS
 		}
 	};
 
+	goTaskView = () => {
+		const { navigation, link } = this.props;
+		navigation.navigate('OutsideStack', { screen: 'AuthenticationWebView', params: { url: link, authType: 'Task Detail' } });
+		navigation.navigate('ModalStackNavigator', { screen: 'AuthenticationWebView', params: { url: link, authType: 'My task' } }); // table
+	};
+
 	toggleFollowThread = () => {
 		logEvent(events.ROOM_TOGGLE_FOLLOW_THREADS);
 		const { isFollowingThread } = this.state;
@@ -184,8 +221,8 @@ class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsS
 	};
 
 	render() {
-		const { isFollowingThread, tunread, tunreadUser, tunreadGroup } = this.state;
-		const { t, tmid, threadsEnabled, teamId, joined } = this.props;
+		const { isFollowingThread, tunread, tunreadUser, tunreadGroup, room } = this.state;
+		const { t, tmid, threadsEnabled, teamId, joined, announcement } = this.props;
 		if (t === 'l') {
 			return null;
 		}
@@ -202,6 +239,9 @@ class RightButtonsContainer extends Component<IRightButtonsProps, IRigthButtonsS
 		}
 		return (
 			<HeaderButton.Container>
+				<HeaderButton.Item onPress={() => RocketChat.callJitsi(room, true)} testID='room-actions-voice' iconName='phone' />
+				<HeaderButton.Item onPress={() => RocketChat.callJitsi(room)} testID='room-actions-video' iconName='camera' />
+				{announcement ? <HeaderButton.Item iconName='document' onPress={this.goTaskView} testID='room-view-taskview' /> : null}
 				{isTeamRoom({ teamId, joined }) ? (
 					<HeaderButton.Item iconName='channel-public' onPress={this.goTeamChannels} testID='room-view-header-team-channels' />
 				) : null}

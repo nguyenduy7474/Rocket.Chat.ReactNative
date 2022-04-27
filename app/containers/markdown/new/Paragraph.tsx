@@ -9,13 +9,14 @@ import { themes } from '../../../lib/constants';
 
 interface IParagraphProps {
 	value: ParagraphProps['value'];
+	checkauthor: any;
 }
 
-const Paragraph = ({ value }: IParagraphProps) => {
+const Paragraph = ({ value, checkauthor }: IParagraphProps) => {
 	const { theme } = useTheme();
 	return (
 		<Text style={[styles.text, { color: themes[theme].bodyText }]}>
-			<Inline value={value} />
+			<Inline value={value} checkauthor={checkauthor} />
 		</Text>
 	);
 };

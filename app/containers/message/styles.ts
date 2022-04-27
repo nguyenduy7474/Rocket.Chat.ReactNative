@@ -20,7 +20,15 @@ export default StyleSheet.create({
 		flex: 1,
 		marginLeft: 46
 	},
+	messageContentOwn: {
+		flex: 1,
+		marginRight: 10,
+		alignItems: 'flex-end'
+	},
 	messageContentWithHeader: {
+		marginLeft: 10
+	},
+	messageContentWithHeaderOwn: {
 		marginLeft: 10
 	},
 	messageContentWithError: {
@@ -29,7 +37,9 @@ export default StyleSheet.create({
 	flex: {
 		flexDirection: 'row'
 	},
-	temp: { opacity: 0.3 },
+	temp: {
+		opacity: 0.3
+	},
 	marginTop: {
 		marginTop: 6
 	},
@@ -107,7 +117,8 @@ export default StyleSheet.create({
 		minHeight: isTablet ? 300 : 200,
 		borderRadius: 4,
 		borderWidth: 1,
-		overflow: 'hidden'
+		overflow: 'hidden',
+		resizeMode: 'contain'
 	},
 	imagePressed: {
 		opacity: 0.5

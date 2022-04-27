@@ -23,6 +23,7 @@ interface IBodyProps {
 	useRealName?: boolean;
 	username: string;
 	baseUrl: string;
+	checkauthor: any;
 }
 
 const Body = ({
@@ -34,7 +35,8 @@ const Body = ({
 	navToRoomInfo,
 	getCustomEmoji,
 	baseUrl,
-	onLinkPress
+	onLinkPress,
+	checkauthor
 }: IBodyProps) => {
 	if (isEmpty(tokens)) {
 		return null;
@@ -65,7 +67,7 @@ const Body = ({
 					case 'QUOTE':
 						return <Quote value={block.value} />;
 					case 'PARAGRAPH':
-						return <Paragraph value={block.value} />;
+						return <Paragraph value={block.value} checkauthor={checkauthor} />;
 					case 'CODE':
 						return <Code value={block.value} />;
 					case 'HEADING':
