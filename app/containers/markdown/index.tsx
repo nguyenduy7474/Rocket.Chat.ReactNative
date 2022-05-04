@@ -180,7 +180,7 @@ class Markdown extends PureComponent<IMarkdownProps, any> {
 			return (
 				<Text
 					accessibilityLabel={literal}
-					style={[styles.text, defaultStyle, ...style, { color: 'white' }]}
+					style={[styles.text, defaultStyle, ...style, { color: 'black' }]}
 					numberOfLines={numberOfLines}>
 					{literal}
 				</Text>

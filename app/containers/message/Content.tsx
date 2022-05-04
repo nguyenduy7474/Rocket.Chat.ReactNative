@@ -74,7 +74,7 @@ const Content = React.memo(
 				content = (
 					<View
 						style={{
-							backgroundColor: '#0084ff',
+							backgroundColor: '#ffebd4',
 							padding: 10,
 							borderRadius: 10,
 							maxWidth: '70%'

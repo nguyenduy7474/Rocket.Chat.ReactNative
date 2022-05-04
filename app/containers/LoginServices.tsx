@@ -396,11 +396,11 @@ class LoginServices extends React.PureComponent<ILoginServicesProps, ILoginServi
 				theme={theme}
 				activeOpacity={0.5}
 				underlayColor={themes[theme].buttonText}>
-				<View style={styles.serviceButtonContainer}>
+				<View style={[styles.serviceButtonContainer, { backgroundColor: '#2e3aff' }]}>
 					{service.authType === 'oauth' || service.authType === 'apple' ? (
 						<CustomIcon name={icon} size={24} color={themes[theme].titleText} style={styles.serviceIcon} />
 					) : null}
-					<Text style={[styles.serviceText, { color: themes[theme].titleText }]}>{buttonText}</Text>
+					<Text style={[styles.serviceText, { color: 'white' }]}>{buttonText}</Text>
 				</View>
 			</Touch>
 		);

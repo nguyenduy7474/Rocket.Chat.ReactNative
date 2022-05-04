@@ -47,6 +47,10 @@ class WorkspaceView extends React.Component<IWorkSpaceProp, any> {
 		);
 	}
 
+	componentDidMount() {
+		this.login();
+	}
+
 	login = () => {
 		const { navigation, server, Site_Name, Accounts_iframe_enabled } = this.props;
 		if (Accounts_iframe_enabled) {

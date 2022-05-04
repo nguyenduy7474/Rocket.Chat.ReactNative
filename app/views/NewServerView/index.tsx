@@ -94,7 +94,7 @@ class NewServerView extends React.Component<INewServerViewProps, INewServerViewS
 		this.setHeader();
 
 		this.state = {
-			text: '',
+			text: 'chat.oshima.vn',
 			connectingOpen: false,
 			certificate: null,
 			serversHistory: []
@@ -104,7 +104,7 @@ class NewServerView extends React.Component<INewServerViewProps, INewServerViewS
 	}
 
 	componentDidMount() {
-		this.queryServerHistory();
+		this.submit();
 	}
 
 	componentWillUnmount() {

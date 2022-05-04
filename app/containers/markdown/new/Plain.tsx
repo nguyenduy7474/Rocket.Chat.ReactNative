@@ -15,7 +15,7 @@ const Plain = ({ value, checkauthor }: IPlainProps) => {
 	// const { theme } = useTheme();
 	if (checkauthor === 'true') {
 		return (
-			<Text accessibilityLabel={value} style={[styles.plainText, { color: 'white' }]}>
+			<Text accessibilityLabel={value} style={[styles.plainText, { color: 'black' }]}>
 				{value}
 			</Text>
 		);
